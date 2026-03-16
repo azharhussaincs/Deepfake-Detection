@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f4ff',
+                            100: '#e0e9ff',
+                            200: '#c0d2ff',
+                            300: '#90afff',
+                            400: '#6086ff',
+                            500: '#3b5cff',
+                            600: '#253dff',
+                            700: '#1c2eff',
+                            800: '#1625cc',
+                            900: '#1421a3',
+                            950: '#0a1052',
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    },
+                    animation: {
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'scanline': 'scanline 8s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1)' },
+                            '100%': { boxShadow: '0 0 10px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3)' },
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(30, 58, 138, 0.1) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L30 30' stroke='%233b82f6' stroke-width='1' stroke-opacity='0.1' fill='none'/%3E%3Ccircle cx='30' cy='30' r='1' fill='%233b82f6' fill-opacity='0.05'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ui-slider {
+            background: #1e293b;
+            border: none;
+            height: 6px;
+            border-radius: 9999px;
+        }
+        .ui-slider-handle {
+            background: #3b82f6 !important;
+            border: 4px solid #0f172a !important;
+            border-radius: 50% !important;
+            width: 20px !important;
+            height: 20px !important;
+            top: -7px !important;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transition: transform 0.2s ease !important;
+        }
+        .ui-slider-handle:hover {
+            transform: scale(1.2) !important;
+        }
+        .ui-slider-range {
+            background: #3b82f6;
+            border-radius: 9999px;
+        }
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, transparent 0%, rgba(59, 130, 246, 0.05) 50%, transparent 100%);
+            position: absolute;
+            pointer-events: none;
+        }
+        ::selection {
+            background: #3b82f6;
+            color: white;
+        }
+    </style>
+    <title>DeepFake Detection | AI Forensic Lab</title>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white overflow-x-hidden relative">
+    <div class="grid-overlay"></div>
+    <div class="scanline animate-scanline"></div>
+    {% include 'nav-bar.html' %}
+    
+    <main class="flex-grow relative z-10">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/jquery-ui.min.js"></script>
+    
+    {% block js_cripts %}
+    {% endblock %}
+    
+    {% include 'footer.html' %}
+</body>
+</html>

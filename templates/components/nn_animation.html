@@ -1,0 +1,114 @@
+<div class="nn-animation-container relative w-full h-full overflow-hidden opacity-40">
+    <canvas id="nnCanvas" class="w-full h-full"></canvas>
+</div>
+
+<script>
+(function() {
+    const canvas = document.getElementById('nnCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let nodes = [];
+    let connections = [];
+    const layers = [4, 6, 6, 4];
+    const nodeRadius = 4;
+    const padding = 50;
+
+    function resize() {
+        width = canvas.offsetWidth;
+        height = canvas.offsetHeight;
+        canvas.width = width;
+        canvas.height = height;
+        initNodes();
+    }
+
+    function initNodes() {
+        nodes = [];
+        connections = [];
+        const layerWidth = (width - 2 * padding) / (layers.length - 1);
+        
+        layers.forEach((count, l) => {
+            const x = padding + l * layerWidth;
+            const layerNodes = [];
+            const layerHeight = (height - 2 * padding);
+            const nodeSpacing = layerHeight / (count - 1 || 1);
+            const startY = padding + (layerHeight - (count - 1) * nodeSpacing) / 2;
+
+            for (let i = 0; i < count; i++) {
+                const y = startY + i * nodeSpacing;
+                const node = {
+                    x, y,
+                    baseX: x, baseY: y,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    pulse: Math.random() * Math.PI * 2
+                };
+                layerNodes.push(node);
+                nodes.push(node);
+            }
+            
+            if (l > 0) {
+                const prevLayer = nodes.slice(nodes.length - count - layers[l-1], nodes.length - count);
+                layerNodes.forEach(target => {
+                    prevLayer.forEach(source => {
+                        connections.push({ source, target, signal: Math.random() });
+                    });
+                });
+            }
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Dynamic logic for nodes movement
+        const time = Date.now() * 0.001;
+
+        // Draw connections
+        ctx.lineWidth = 1;
+        connections.forEach(conn => {
+            const opacity = 0.05 + Math.sin(time + conn.signal * 10) * 0.05;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+            ctx.beginPath();
+            ctx.moveTo(conn.source.x, conn.source.y);
+            ctx.lineTo(conn.target.x, conn.target.y);
+            ctx.stroke();
+
+            // Moving signal
+            const t = (time * 0.5 + conn.signal) % 1;
+            const sx = conn.source.x + (conn.target.x - conn.source.x) * t;
+            const sy = conn.source.y + (conn.target.y - conn.source.y) * t;
+            
+            ctx.fillStyle = `rgba(147, 197, 253, ${opacity * 5})`;
+            ctx.beginPath();
+            ctx.arc(sx, sy, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // Draw nodes
+        nodes.forEach(node => {
+            node.pulse += 0.03;
+            const scale = 1 + Math.sin(node.pulse) * 0.2;
+            
+            // Subtle movement
+            node.x = node.baseX + Math.sin(time + node.baseY * 0.01) * 15;
+            node.y = node.baseY + Math.cos(time + node.baseX * 0.01) * 15;
+
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.4)';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(59, 130, 246, 0.3)';
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, nodeRadius * scale, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+})();
+</script>

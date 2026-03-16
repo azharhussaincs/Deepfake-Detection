@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="py-12 flex-grow relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 -z-10 pointer-events-none">
+        {% include 'components/tech_symbols.html' %}
+        
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full overflow-hidden">
+            <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-brand-600/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px]"></div>
+            
+            <!-- Neural Network Animation -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] opacity-30 hidden lg:block">
+                {% include 'components/nn_animation.html' %}
+            </div>
+        </div>
+
+        <!-- Floating CV Elements -->
+        <div class="absolute top-20 left-10 text-brand-500/20 font-mono text-[8px] space-y-2 hidden xl:block uppercase animate-float">
+            <div class="bg-brand-500/5 px-2 py-1 border border-brand-500/10 rounded">import torch.nn as nn</div>
+            <div class="bg-brand-500/5 px-2 py-1 border border-brand-500/10 rounded">class ResNextLSTM(nn.Module):</div>
+            <div class="pl-4">&nbsp;&nbsp;def __init__(self):</div>
+            <div class="pl-4">&nbsp;&nbsp;&nbsp;&nbsp;super().__init__()</div>
+            <div class="pl-4">&nbsp;&nbsp;&nbsp;&nbsp;self.cnn = resnext50()</div>
+        </div>
+        <div class="absolute bottom-40 right-10 text-brand-500/20 font-mono text-[8px] space-y-2 hidden xl:block uppercase text-right animate-float" style="animation-delay: 2s">
+            <div class="bg-brand-500/5 px-2 py-1 border border-brand-500/10 rounded inline-block text-left">cv2.detect_faces(img)</div>
+            <div>landmarks = predictor(gray, rect)</div>
+            <div>tensor = transform(face)</div>
+            <div class="bg-brand-500/5 px-2 py-1 border border-brand-500/10 rounded inline-block text-left">output = model(tensor)</div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 space-y-6">
+            <div class="inline-flex items-center space-x-3 bg-brand-500/10 border border-brand-500/20 text-brand-400 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] font-mono shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                <span>System Protocol: Deep Scan V4.2</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-4 tracking-tighter leading-[1] max-w-4xl mx-auto uppercase">
+                DEEPFAKE <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-blue-400 to-cyan-400">DETECTION</span>
+            </h1>
+            <p class="text-lg text-dark-400 max-w-2xl mx-auto leading-relaxed font-medium">
+                High-fidelity synthetic media detection powered by advanced temporal analysis and biometric consistency mapping.
+            </p>
+        </div>
+
+                        <form id="video-upload" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" action="{% url 'ml_app:home' %}">
+                            {% csrf_token %}
+                            
+                            <div class="lg:col-span-8 space-y-10">
+                                <!-- Upload Area -->
+                                <div class="relative group">
+                                    <div id="drop-area" class="border-2 border-dashed border-white/10 rounded-[2rem] px-8 py-20 text-center transition-all group-hover:border-brand-500/50 bg-white/[0.02] group-hover:bg-brand-500/[0.02] cursor-pointer relative overflow-hidden">
+                                        <div class="absolute inset-0 bg-brand-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <div class="relative space-y-6 z-10">
+                                            <div class="relative inline-block">
+                                                <div class="bg-gradient-to-br from-brand-600 to-blue-600 p-6 rounded-3xl w-20 h-20 flex items-center justify-center mx-auto shadow-2xl shadow-brand-900/40 transition-transform group-hover:scale-110 group-hover:rotate-2">
+                                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <div class="text-2xl font-extrabold text-white tracking-tight">
+                                                    INGEST <span class="text-brand-500">EVIDENCE</span>
+                                                </div>
+                                                <p class="text-dark-400 font-mono text-[10px] uppercase tracking-widest">MP4, AVI, MOV, MKV | MAX 100MB</p>
+                                            </div>
+                                            <div class="inline-flex items-center px-6 py-2.5 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-dark-300 group-hover:text-white group-hover:border-brand-500/50 transition-all">
+                                                SELECT LOCAL SOURCE
+                                            </div>
+                                        </div>
+                                        <input type="file" id="{{form.upload_video_file.id_for_label}}" name="upload_video_file" accept="video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" required>
+                                    </div>
+                                    
+                                <div id="file-selected-name" class="mt-6 text-xs font-bold text-brand-400 hidden bg-brand-500/10 py-4 px-6 rounded-2xl flex items-center justify-between border border-brand-500/20 animate-in fade-in slide-in-from-top-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-brand-500 p-1.5 rounded-lg shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                        <span id="selected-filename" class="font-mono truncate max-w-[200px]"></span>
+                                    </div>
+                                    <button type="button" id="clear-file" class="text-[9px] text-rose-500 hover:text-rose-400 uppercase tracking-widest font-bold transition-colors">REMOVE</button>
+                                </div>
+
+                                    {% if form.upload_video_file.errors %}
+                                    {% for each_error in form.upload_video_file.errors %}
+                                    <div class="mt-4 text-[10px] text-rose-400 font-bold font-mono tracking-widest bg-rose-500/10 p-3 rounded-xl border border-rose-500/20 text-center uppercase">
+                                        ERROR: {{ each_error }}
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Video Preview -->
+                                <div id="video-preview-container" class="hidden rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black group relative aspect-video">
+                                    <video id="videos" class="w-full h-full" controls>
+                                        <source src="" id="video_source">
+                                    </video>
+                                    <div class="absolute top-4 right-4 bg-brand-600/80 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] pointer-events-none">
+                                        EVIDENCE_PREVIEW
+                                    </div>
+                                </div>
+
+                                <button id="videoUpload" type="submit" name="submit" class="group relative w-full overflow-hidden bg-brand-600 text-white py-6 px-8 rounded-2xl font-extrabold text-lg transition-all shadow-2xl shadow-brand-900/20 hover:shadow-brand-500/40 transform hover:-translate-y-1 active:scale-[0.98]">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-brand-500 via-blue-500 to-brand-500 animate-gradient opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <span id="button-text" class="relative z-10 flex items-center justify-center space-x-4">
+                                        <span class="tracking-[0.15em] uppercase">INITIATE_FORENSIC_SCAN</span>
+                                        <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    </span>
+                                    <span id="loading-spinner" class="relative z-10 hidden flex items-center justify-center space-x-4">
+                                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span class="tracking-[0.15em] uppercase">ANALYZING_EVIDENCE...</span>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div class="lg:col-span-4 space-y-6">
+                                <!-- Sequence Length Selector -->
+                                <div class="glass-dark rounded-[2rem] p-8 border border-white/5 relative overflow-hidden">
+                                    <div class="flex flex-col space-y-6">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="text-[10px] font-bold text-dark-500 uppercase tracking-[0.3em] font-mono">SCAN_DEPTH</h3>
+                                            <div class="bg-brand-500/10 text-brand-400 text-[10px] font-bold px-3 py-1 rounded-lg border border-brand-500/20 font-mono">
+                                                <span id="slider-value"></span> FRAMES
+                                            </div>
+                                        </div>
+                                        
+                                        <input type="number" hidden id="{{form.sequence_length.id_for_label}}" name="sequence_length">
+                                        <div id="slider" class="mx-2"></div>
+                                        
+                                        <div class="flex justify-between text-[9px] text-dark-500 font-bold uppercase tracking-widest font-mono">
+                                            <span>SURFACE</span>
+                                            <span>DEEP_CORE</span>
+                                        </div>
+
+                                        <p class="text-[10px] text-dark-400 font-medium leading-relaxed italic border-t border-white/5 pt-4">
+                                            Increasing frame sequence enhances detection of temporal artifacts but requires higher computational overhead.
+                                        </p>
+
+                                        {% if form.sequence_length.errors %}
+                                        {% for each_error in form.sequence_length.errors %}
+                                        <div class="text-[9px] text-rose-400 font-bold font-mono tracking-widest uppercase">
+                                            {{ each_error }}
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Industrial Disclaimer -->
+                                <div class="glass-dark rounded-[2rem] p-8 border border-white/5">
+                                    <div class="flex items-center space-x-3 mb-6">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></div>
+                                        <h3 class="text-[10px] font-bold text-white uppercase tracking-[0.3em] font-mono">SYSTEM_SPEC</h3>
+                                    </div>
+                                    <ul class="space-y-4">
+                                        <li class="flex items-start space-x-3 text-[10px] text-dark-400 font-medium">
+                                            <span class="text-brand-500 mt-0.5">●</span>
+                                            <span>ResNext50-LSTM hybrid neural architecture for multi-temporal analysis.</span>
+                                        </li>
+                                        <li class="flex items-start space-x-3 text-[10px] text-dark-400 font-medium">
+                                            <span class="text-brand-500 mt-0.5">●</span>
+                                            <span>Biometric signature mapping via Dlib 19.24.2 facial landmarks.</span>
+                                        </li>
+                                        <li class="flex items-start space-x-3 text-[10px] text-dark-400 font-medium">
+                                            <span class="text-brand-500 mt-0.5">●</span>
+                                            <span>Asynchronous GPU/CPU processing for industrial-level throughput.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block js_cripts %}
+<script>
+    $(function () {
+        const sliderSequenceNumbers = [10, 20, 40, 60, 80, 100];
+        const slider = $("div#slider").slider({
+            value: 0,
+            min: 0,
+            max: sliderSequenceNumbers.length - 1,
+            range: "min",
+            slide: function (event, ui) {
+                const val = sliderSequenceNumbers[ui.value];
+                $('#{{form.sequence_length.id_for_label}}').val(val);
+                $('#slider-value').text(val);
+            }
+        });
+        
+        const initialVal = sliderSequenceNumbers[$("#slider").slider("value")];
+        $("#{{form.sequence_length.id_for_label}}").val(initialVal);
+        $('#slider-value').text(initialVal);
+
+        // File input logic
+        const fileInput = document.getElementById('{{form.upload_video_file.id_for_label}}');
+        const filenameDisplay = document.getElementById('selected-filename');
+        const fileLabel = document.getElementById('file-selected-name');
+        const videoPreview = document.getElementById('video-preview-container');
+        const videoElement = document.getElementById('videos');
+        const videoSource = document.getElementById('video_source');
+
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                filenameDisplay.textContent = fileName;
+                fileLabel.classList.remove('hidden');
+                
+                // Show preview
+                const url = URL.createObjectURL(this.files[0]);
+                videoSource.src = url;
+                videoElement.load();
+                videoPreview.classList.remove('hidden');
+                
+                // Smooth scroll to preview
+                videoPreview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
+        // Clear file logic
+        const clearBtn = document.getElementById('clear-file');
+        clearBtn.addEventListener('click', function() {
+            fileInput.value = '';
+            fileLabel.classList.add('hidden');
+            videoPreview.classList.add('hidden');
+            videoSource.src = '';
+            videoElement.load();
+        });
+
+        // Form submission loading state
+        const uploadForm = document.getElementById('video-upload');
+        const btnText = document.getElementById('button-text');
+        const spinner = document.getElementById('loading-spinner');
+        const submitBtn = document.getElementById('videoUpload');
+
+        uploadForm.addEventListener('submit', function() {
+            btnText.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+        });
+    });
+</script>
+{% endblock %}
